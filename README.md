@@ -1,0 +1,1 @@
+# Beautify-UI-qr-code-generator
