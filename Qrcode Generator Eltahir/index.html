@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="qrcode.css">
+    <title>QR CODE ELTAHIR</title>
+</head>
+<body>
+
+    <div class="hawia">
+        <div class="render">
+        <p> Beautify UI </p>
+        <input type="text" placeholder="أدخل النص أو الرابط" id="qrText">
+        <div id="imgBox">
+            <img src="" id="qrImage">
+        </div>
+           <div id="img-download"> <a id="downloadLink" href="#">تحميل الصورة</a> </div> 
+        <button onclick="generateQR()">توليد ال كيو أر كود</button>
+        </div>
+    </div>
+
+
+   <script>
+let imgBox = document.getElementById("imgBox");
+let qrImage = document.getElementById("qrImage");
+let qrText = document.getElementById("qrText");
+let imgDownload = document.getElementById("img-download");
+let downloadLink = document.getElementById("downloadLink");
+
+function generateQR() {
+    if (qrText.value.length > 0) {
+        const qrURL =
+          "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" +
+          encodeURIComponent(qrText.value);
+
+        qrImage.src = qrURL;
+        imgBox.classList.add("show-img");
+        imgDownload.classList.add("show-btn");
+
+        // Force download
+        downloadLink.onclick = async function () {
+            const response = await fetch(qrURL);
+            const blob = await response.blob();
+            const blobURL = URL.createObjectURL(blob);
+
+            const tempLink = document.createElement("a");
+            tempLink.href = blobURL;
+            tempLink.download = "qrcode.png";
+            document.body.appendChild(tempLink);
+            tempLink.click();
+            document.body.removeChild(tempLink);
+
+            URL.revokeObjectURL(blobURL);
+        };
+    } else {
+        qrText.classList.add("error");
+        setTimeout(() => qrText.classList.remove("error"), 1000);
+    }
+}
+</script>
+
+</body>
+</html>
